@@ -15,28 +15,33 @@
             justify-content: center;
             align-items: center;
         }
+
         .container {
             background: white;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             max-width: 400px;
             width: 90%;
         }
+
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
             color: #333;
             font-weight: bold;
         }
+
         input[type="email"], input[type="password"] {
             width: 100%;
             padding: 12px;
@@ -45,11 +50,13 @@
             font-size: 16px;
             box-sizing: border-box;
         }
+
         input:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
         }
+
         .btn {
             display: block;
             width: 100%;
@@ -64,15 +71,19 @@
             transition: background-color 0.3s;
             margin: 10px 0;
         }
+
         .btn:hover {
             background-color: #0056b3;
         }
+
         .btn-secondary {
             background-color: #28a745;
         }
+
         .btn-secondary:hover {
             background-color: #1e7e34;
         }
+
         .error-message {
             background-color: #f8d7da;
             color: #721c24;
@@ -82,6 +93,7 @@
             margin-bottom: 20px;
             text-align: center;
         }
+
         .success-message {
             background-color: #d4edda;
             color: #155724;
@@ -91,20 +103,24 @@
             margin-bottom: 20px;
             text-align: center;
         }
+
         .links {
             text-align: center;
             margin-top: 20px;
             padding-top: 20px;
             border-top: 1px solid #dee2e6;
         }
+
         .links a {
             color: #007bff;
             text-decoration: none;
             margin: 0 10px;
         }
+
         .links a:hover {
             text-decoration: underline;
         }
+
         .register-section {
             background-color: #e7f3ff;
             padding: 20px;
@@ -113,10 +129,12 @@
             text-align: center;
             border: 1px solid #b8daff;
         }
+
         .register-section h3 {
             margin-top: 0;
             color: #0056b3;
         }
+
         .test-accounts {
             background-color: #fff3cd;
             border: 1px solid #ffeaa7;
@@ -126,6 +144,7 @@
             margin-top: 20px;
             font-size: 14px;
         }
+
         .test-accounts h4 {
             margin-top: 0;
             color: #856404;
@@ -136,17 +155,14 @@
 <div class="container">
     <h1>🔑 Вход в систему</h1>
 
-    <!-- Сообщение об успешной регистрации -->
     <div th:if="${param.registered}" class="success-message">
         ✅ Регистрация прошла успешно! Теперь вы можете войти в систему.
     </div>
 
-    <!-- Сообщение об успешном выходе -->
     <div th:if="${param.logout}" class="success-message">
         👋 Вы успешно вышли из системы!
     </div>
 
-    <!-- Сообщение об ошибке входа -->
     <div th:if="${param.error}" class="error-message">
         ❌ Неверный email или пароль!
     </div>
@@ -174,21 +190,18 @@
         <button type="submit" class="btn">🔐 Войти</button>
     </form>
 
-    <!-- Раздел регистрации -->
     <div class="register-section">
         <h3>👤 Впервые у нас?</h3>
         <p>Зарегистрируйтесь, чтобы получить доступ к личному кабинету</p>
         <a th:href="@{/register}" class="btn btn-secondary">📝 Создать новый аккаунт</a>
     </div>
 
-    <!-- Тестовые аккаунты -->
     <div class="test-accounts">
         <h4>🧪 Тестовые учётные записи:</h4>
         <p><strong>👨‍💼 Администратор:</strong> admin@admin.com / admin</p>
         <p><strong>👤 Пользователь:</strong> user@user.com / user</p>
     </div>
 
-    <!-- Навигационные ссылки -->
     <div class="links">
         <a th:href="@{/}">← Вернуться на главную</a>
     </div>
