@@ -86,7 +86,6 @@ public class UserDaoImpl implements UserDao {
             System.err.println("❌ UserDaoImpl: Ошибка при поиске: " + e.getMessage());
             return null;
         }
-
     }
 
     @Override

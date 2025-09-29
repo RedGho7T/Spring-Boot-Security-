@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,13 @@ public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -67,6 +70,21 @@ public class AdminController {
                     .collect(Collectors.toSet());
 
             user.setRoles(roles);
+
+            if (user.getPassword() == null || user.getPassword().isEmpty()) {
+                String password = user.getPassword();
+                System.out.println("Шифрование пароля: "+ password.length());
+
+                String encodedPassword = passwordEncoder.encode(password);
+                user.setPassword(encodedPassword);
+
+                System.out.println("Пароль зашифрован: "+ encodedPassword.substring(0,20) +"...");
+            }else {
+                System.out.println("Пароль пустой или null");
+                model.addAttribute("eror","Пароль не может быть пустым");
+                model.addAttribute("allRoles", roleService.getAllRoles());
+                return "admin/new";
+            }
 
             userService.saveUser(user);
 
@@ -131,6 +149,8 @@ public class AdminController {
                 user.setPassword(existingUser.getPassword());
                 System.out.println("⚠️ Пароль не изменился");
             } else {
+                String encodedPassword = passwordEncoder.encode(user.getPassword());
+                user.setPassword(encodedPassword);
                 System.out.println("✅ Пароль обновлен");
             }
 

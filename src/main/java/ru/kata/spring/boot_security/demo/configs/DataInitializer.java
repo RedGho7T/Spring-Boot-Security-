@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
@@ -18,6 +19,9 @@ public class DataInitializer implements CommandLineRunner {
     private final RoleDao roleDao;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     public DataInitializer(UserDao userDao, RoleDao roleDao) {
         this.userDao = userDao;
         this.roleDao = roleDao;
@@ -32,9 +36,9 @@ public class DataInitializer implements CommandLineRunner {
         Role adminRole = createRoleIfNotExists("ROLE_ADMIN");
         Role userRole = createRoleIfNotExists("ROLE_USER");
 
-        // Администратор
+        // Администратор, включил шифрование
         if (!userDao.existsByEmail("admin@admin.com")) {
-            User admin = new User("Администратор", 30, "admin@admin.com", "admin");
+            User admin = new User("Администратор", 30, "admin@admin.com", passwordEncoder.encode("admin"));
             admin.setRoles(Set.of(adminRole));
             userDao.save(admin);
             System.out.println("✅ Создан администратор: admin@admin.com / admin");
@@ -48,7 +52,7 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("✅ Создан пользователь: user@user.com / user");
         }
 
-        // Тестовый пользователь (опционально)
+        // Тестовый пользователь
         if (!userDao.existsByEmail("test@test.com")) {
             User test = new User("Тестовый пользователь", 28, "test@test.com", "test");
             test.setRoles(Set.of(userRole));

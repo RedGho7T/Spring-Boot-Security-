@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="Fix code style" />
+    <list default="true" id="95aeefee-b607-4e6e-b4d0-8b0418d419ba" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/PasswordMigrator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/controllers/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/dao/UserDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/dao/UserDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/kata/spring/boot_security/demo/service/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/DataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/DataInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/configs/WebSecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/controllers/AdminController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/dao/UserDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/dao/UserDaoImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/service/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ru/kata/spring/boot_security/demo/service/UserServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/admin/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin/new.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/register.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,6 +160,9 @@
       <workItem from="1759064201709" duration="20233000" />
       <workItem from="1759086243841" duration="3346000" />
       <workItem from="1759105869448" duration="987000" />
+      <workItem from="1759108468643" duration="386000" />
+      <workItem from="1759145824007" duration="9137000" />
+      <workItem from="1759165974732" duration="2628000" />
     </task>
     <task id="LOCAL-00001" summary="Fix code style">
       <option name="closed" value="true" />
@@ -149,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759106785789</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fix code style">
+      <option name="closed" value="true" />
+      <created>1759108514880</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1759108514880</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

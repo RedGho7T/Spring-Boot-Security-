@@ -8,10 +8,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.List;
 
-/**
- * Реализация сервиса для работы с пользователями
- * Содержит бизнес-логику и транзакционные методы
- */
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -58,19 +54,11 @@ public class UserServiceImpl implements UserService {
         return userDao.existsByEmail(email);
     }
 
-    /**
-     * ОРИГИНАЛЬНЫЙ метод - сохраняем для совместимости
-     * Используется в UserDetailsServiceImpl
-     */
     @Override
     public User getByEmail(String email) {
         return userDao.findByEmail(email);
     }
 
-    /**
-     * НОВЫЙ метод - для единообразия с DAO
-     * Используется в RegisterController
-     */
     @Override
     public User findByEmail(String email) {
         return userDao.findByEmail(email);

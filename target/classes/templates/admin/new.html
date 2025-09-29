@@ -1,100 +1,433 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Создание пользователя</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 500px;
-            margin: 20px auto;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+            color: #555;
         }
 
-        input, select {
+        .required {
+            color: red;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], input[type="password"], select {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 5px;
+            font-size: 16px;
             box-sizing: border-box;
         }
 
-        .btn {
-            padding: 10px 20px;
-            margin: 5px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        input:focus, select:focus {
+            border-color: #007bff;
+            outline: none;
         }
 
-        .btn-success {
-            background-color: #28a745;
-            color: white;
+        /* НОВЫЕ СТИЛИ ДЛЯ ВАЛИДАЦИИ ПАРОЛЯ */
+        .password-requirements {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 14px;
         }
 
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
+        .password-requirements h4 {
+            margin: 0 0 10px 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .requirement:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement .icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+
+        .requirement.valid {
+            color: #28a745;
+        }
+
+        .requirement.invalid {
+            color: #6c757d;
+        }
+
+        .password-match {
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .password-match.match {
+            color: #28a745;
+        }
+
+        .password-match.no-match {
+            color: #dc3545;
+        }
+
+        input.valid-password {
+            border-color: #28a745;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        }
+
+        input.invalid-password {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+        }
+        /* КОНЕЦ НОВЫХ СТИЛЕЙ */
+
+        .checkbox-group {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .checkbox-item {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .checkbox-item label {
+            display: inline;
+            font-weight: normal;
         }
 
         .error {
-            color: red;
-            font-size: 12px;
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button, .btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        button:hover, .btn:hover {
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
         }
     </style>
 </head>
 <body>
-<h1>Создание пользователя</h1>
+<div class="container">
+    <h1>Создание пользователя</h1>
 
-<form th:action="@{/admin}" th:object="${user}" method="post">
-    <div class="form-group">
-        <label for="name">Имя:</label>
-        <input type="text" id="name" th:field="*{name}" required>
-        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
-    </div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
 
-    <div class="form-group">
-        <label for="age">Возраст:</label>
-        <input type="number" id="age" th:field="*{age}" min="1" required>
-        <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error</div>
-    </div>
-
-    <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" th:field="*{email}" required>
-        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
-    </div>
-
-    <div class="form-group">
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" th:field="*{password}" required>
-        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
-    </div>
-
-    <div class="form-group">
-        <label>Роли:</label>
-        <div th:each="role : ${allRoles}">
-            <label style="font-weight: normal;">
-                <input type="checkbox"
-                       name="roleIds"
-                       th:value="${role.id}"
-                       th:checked="${false}"/>
-                <span th:text="${role.name}">ROLE_USER</span>
-            </label>
+    <form th:action="@{/admin}" th:object="${user}" method="post" id="createUserForm">
+        <div class="form-group">
+            <label for="name">Имя <span class="required">*</span>:</label>
+            <input type="text" id="name" th:field="*{name}" required>
+            <div th:if="${#fields.hasErrors('name')}" class="error">
+                <span th:errors="*{name}">Error</span>
+            </div>
         </div>
-    </div>
 
-    <button type="submit" class="btn btn-success">Создать</button>
-    <a th:href="@{/admin}" class="btn btn-secondary">Отмена</a>
-</form>
+        <div class="form-group">
+            <label for="age">Возраст <span class="required">*</span>:</label>
+            <input type="number" id="age" th:field="*{age}" min="1" max="150" required>
+            <div th:if="${#fields.hasErrors('age')}" class="error">
+                <span th:errors="*{age}">Error</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email <span class="required">*</span>:</label>
+            <input type="email" id="email" th:field="*{email}" required>
+            <div th:if="${#fields.hasErrors('email')}" class="error">
+                <span th:errors="*{email}">Error</span>
+            </div>
+        </div>
+
+        <!-- ОБНОВЛЕННЫЙ БЛОК ПАРОЛЯ -->
+        <div class="form-group">
+            <label for="password">Пароль <span class="required">*</span>:</label>
+            <input type="password"
+                   id="password"
+                   th:field="*{password}"
+                   placeholder="Введите надежный пароль"
+                   required
+                   minlength="8">
+
+            <!-- НОВЫЙ БЛОК: Требования к паролю -->
+            <div class="password-requirements" id="passwordRequirements">
+                <h4>Требования к паролю:</h4>
+                <div class="requirement" id="lengthReq">
+                    <span class="icon">❌</span>
+                    <span>Минимум 8 символов</span>
+                </div>
+                <div class="requirement" id="uppercaseReq">
+                    <span class="icon">❌</span>
+                    <span>Заглавная буква (A-Z)</span>
+                </div>
+                <div class="requirement" id="lowercaseReq">
+                    <span class="icon">❌</span>
+                    <span>Строчная буква (a-z)</span>
+                </div>
+                <div class="requirement" id="digitReq">
+                    <span class="icon">❌</span>
+                    <span>Цифра (0-9)</span>
+                </div>
+            </div>
+
+            <div th:if="${#fields.hasErrors('password')}" class="error">
+                <span th:errors="*{password}">Error</span>
+            </div>
+        </div>
+
+        <!-- НОВЫЙ БЛОК: Подтверждение пароля -->
+        <div class="form-group">
+            <label for="confirmPassword">Подтверждение пароля <span class="required">*</span>:</label>
+            <input type="password"
+                   id="confirmPassword"
+                   name="confirmPassword"
+                   placeholder="Повторите пароль"
+                   required>
+
+            <!-- НОВЫЙ БЛОК: Индикатор совпадения -->
+            <div class="password-match" id="passwordMatch" style="display: none;">
+                <span id="matchText"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Роли <span class="required">*</span>:</label>
+            <div class="checkbox-group">
+                <div th:each="role : ${allRoles}" class="checkbox-item">
+                    <input type="checkbox"
+                           th:field="*{roles}"
+                           th:value="${role.id}"
+                           th:id="'role_' + ${role.id}">
+                    <label th:for="'role_' + ${role.id}" th:text="${role.name}">ROLE_USER</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button type="submit"
+                    id="createBtn"
+                    disabled>
+                Создать
+            </button>
+            <a th:href="@{/admin}" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+</div>
+
+<!-- НОВЫЙ JAVASCRIPT ДЛЯ ВАЛИДАЦИИ -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const passwordField = document.getElementById('password');
+        const confirmPasswordField = document.getElementById('confirmPassword');
+        const createBtn = document.getElementById('createBtn');
+
+        // Элементы требований к паролю
+        const lengthReq = document.getElementById('lengthReq');
+        const uppercaseReq = document.getElementById('uppercaseReq');
+        const lowercaseReq = document.getElementById('lowercaseReq');
+        const digitReq = document.getElementById('digitReq');
+
+        // Элементы для проверки совпадения
+        const passwordMatch = document.getElementById('passwordMatch');
+        const matchText = document.getElementById('matchText');
+
+        // Функция проверки требований к паролю
+        function checkPasswordRequirements() {
+            const password = passwordField.value;
+
+            // Проверка длины
+            const hasLength = password.length >= 8;
+            updateRequirement(lengthReq, hasLength);
+
+            // Проверка заглавной буквы
+            const hasUppercase = /[A-Z]/.test(password);
+            updateRequirement(uppercaseReq, hasUppercase);
+
+            // Проверка строчной буквы
+            const hasLowercase = /[a-z]/.test(password);
+            updateRequirement(lowercaseReq, hasLowercase);
+
+            // Проверка цифры
+            const hasDigit = /\d/.test(password);
+            updateRequirement(digitReq, hasDigit);
+
+            // Общая проверка
+            const isPasswordValid = hasLength && hasUppercase && hasLowercase && hasDigit;
+
+            // Изменяем стиль поля
+            if (password.length > 0) {
+                if (isPasswordValid) {
+                    passwordField.classList.remove('invalid-password');
+                    passwordField.classList.add('valid-password');
+                } else {
+                    passwordField.classList.remove('valid-password');
+                    passwordField.classList.add('invalid-password');
+                }
+            } else {
+                passwordField.classList.remove('valid-password', 'invalid-password');
+            }
+
+            return isPasswordValid;
+        }
+
+        // Обновление индикатора требования
+        function updateRequirement(element, isValid) {
+            const icon = element.querySelector('.icon');
+            if (isValid) {
+                element.classList.remove('invalid');
+                element.classList.add('valid');
+                icon.textContent = '✅';
+            } else {
+                element.classList.remove('valid');
+                element.classList.add('invalid');
+                icon.textContent = '❌';
+            }
+        }
+
+        // Функция проверки совпадения паролей
+        function checkPasswordMatch() {
+            const password = passwordField.value;
+            const confirmPassword = confirmPasswordField.value;
+
+            if (confirmPassword === '') {
+                passwordMatch.style.display = 'none';
+                confirmPasswordField.classList.remove('valid-password', 'invalid-password');
+                return false;
+            }
+
+            passwordMatch.style.display = 'block';
+
+            if (password === confirmPassword) {
+                passwordMatch.classList.remove('no-match');
+                passwordMatch.classList.add('match');
+                matchText.textContent = '✅ Пароли совпадают';
+
+                confirmPasswordField.classList.remove('invalid-password');
+                confirmPasswordField.classList.add('valid-password');
+
+                return true;
+            } else {
+                passwordMatch.classList.remove('match');
+                passwordMatch.classList.add('no-match');
+                matchText.textContent = '❌ Пароли не совпадают';
+
+                confirmPasswordField.classList.remove('valid-password');
+                confirmPasswordField.classList.add('invalid-password');
+
+                return false;
+            }
+        }
+
+        // Общая функция проверки формы
+        function validateForm() {
+            const isPasswordValid = checkPasswordRequirements();
+            const doPasswordsMatch = checkPasswordMatch();
+            const isFormValid = isPasswordValid && doPasswordsMatch;
+
+            // Активируем/деактивируем кнопку
+            createBtn.disabled = !isFormValid;
+
+            return isFormValid;
+        }
+
+        // События
+        passwordField.addEventListener('input', validateForm);
+        confirmPasswordField.addEventListener('input', validateForm);
+
+        // Проверка при отправке формы
+        document.getElementById('createUserForm').addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                alert('Пожалуйста, исправьте ошибки в форме');
+            }
+        });
+    });
+</script>
 </body>
 </html>
