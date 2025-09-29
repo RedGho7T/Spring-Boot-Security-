@@ -6,13 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    // Главная страница
     @GetMapping("/")
     public String index() {
-        return "index"; // templates/index.html
+        return "index";
     }
 
-    // Страница входа
     @GetMapping("/login")
     public String login() {
         return "login";

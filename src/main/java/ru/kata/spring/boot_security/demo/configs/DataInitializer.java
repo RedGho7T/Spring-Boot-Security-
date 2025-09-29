@@ -30,7 +30,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Создаём роли
         Role adminRole = createRoleIfNotExists("ROLE_ADMIN");
-        Role userRole  = createRoleIfNotExists("ROLE_USER");
+        Role userRole = createRoleIfNotExists("ROLE_USER");
 
         // Администратор
         if (!userDao.existsByEmail("admin@admin.com")) {

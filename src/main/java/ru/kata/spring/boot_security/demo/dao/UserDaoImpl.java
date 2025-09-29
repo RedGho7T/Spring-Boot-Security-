@@ -44,7 +44,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void deleteById(Long id) {
-        delete(id);  // Делегируем к методу delete
+        delete(id);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class UserDaoImpl implements UserDao {
         }
 
     }
+
     @Override
     public User getByEmail(String email) {
         try {

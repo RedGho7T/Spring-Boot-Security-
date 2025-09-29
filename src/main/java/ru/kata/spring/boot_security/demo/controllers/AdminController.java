@@ -26,7 +26,6 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    // Список пользователей
     @GetMapping
     public String listUsers(Model model) {
         try {
@@ -41,7 +40,6 @@ public class AdminController {
         }
     }
 
-    // Форма создания пользователя
     @GetMapping("/new")
     public String newUserForm(Model model) {
         try {
@@ -55,25 +53,21 @@ public class AdminController {
         }
     }
 
-    // Создание пользователя
     @PostMapping
     public String createUser(@ModelAttribute("user") User user, Model model) {
         try {
             System.out.println("🔄 Создаём пользователя: " + user.getEmail());
 
-            // Получаем выбранные роли из формы
             Set<Long> selectedRoleIds = user.getRoles().stream()
                     .map(Role::getId)
                     .collect(Collectors.toSet());
 
-            // Загружаем полные объекты Role по ID
             Set<Role> roles = roleService.getAllRoles().stream()
                     .filter(r -> selectedRoleIds.contains(r.getId()))
                     .collect(Collectors.toSet());
 
             user.setRoles(roles);
 
-            // УПРОЩЕННАЯ ВЕРСИЯ - пароль сохраняется как есть
             userService.saveUser(user);
 
             System.out.println("✅ Пользователь создан успешно");
@@ -87,7 +81,6 @@ public class AdminController {
         }
     }
 
-    // Форма редактирования пользователя
     @GetMapping("/{id}/edit")
     public String editUserForm(@PathVariable("id") Long id, Model model) {
         try {
@@ -107,7 +100,6 @@ public class AdminController {
         }
     }
 
-    // ИСПРАВЛЕННЫЙ метод обновления пользователя
     @PostMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id,
                              @ModelAttribute("user") User user,
@@ -116,17 +108,14 @@ public class AdminController {
         try {
             System.out.println("🔄 Обновляем пользователя с ID: " + id);
 
-            // Получаем существующего пользователя
             User existingUser = userService.getUserById(id);
             if (existingUser == null) {
                 System.out.println("❌ Пользователь с ID " + id + " не найден");
                 return "redirect:/admin";
             }
 
-            // Устанавливаем ID
             user.setId(id);
 
-            // Обрабатываем роли
             if (roleIds != null && !roleIds.isEmpty()) {
                 Set<Role> roles = roleService.getAllRoles().stream()
                         .filter(r -> roleIds.contains(r.getId()))
@@ -134,22 +123,17 @@ public class AdminController {
                 user.setRoles(roles);
                 System.out.println("✅ Установлены роли: " + roles.size());
             } else {
-                // Если роли не выбраны, оставляем старые
                 user.setRoles(existingUser.getRoles());
                 System.out.println("⚠️ Роли не изменились");
             }
 
-            // Обрабатываем пароль
             if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-                // Если пароль пустой, оставляем старый
                 user.setPassword(existingUser.getPassword());
                 System.out.println("⚠️ Пароль не изменился");
             } else {
-                // УПРОЩЕННАЯ ВЕРСИЯ - сохраняем пароль как есть
                 System.out.println("✅ Пароль обновлен");
             }
 
-            // Сохраняем пользователя
             userService.updateUser(user);
             System.out.println("✅ Пользователь обновлен успешно");
 
@@ -164,7 +148,6 @@ public class AdminController {
         }
     }
 
-    // Удаление пользователя
     @PostMapping("/{id}/delete")
     public String deleteUser(@PathVariable("id") Long id) {
         try {

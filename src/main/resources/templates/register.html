@@ -15,28 +15,33 @@
             justify-content: center;
             align-items: center;
         }
+
         .container {
             background: white;
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             max-width: 500px;
             width: 90%;
         }
+
         h1 {
             text-align: center;
             color: #333;
             margin-bottom: 30px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
+
         label {
             display: block;
             margin-bottom: 5px;
             color: #333;
             font-weight: bold;
         }
+
         input[type="text"], input[type="email"], input[type="number"], input[type="password"] {
             width: 100%;
             padding: 12px;
@@ -45,16 +50,19 @@
             font-size: 16px;
             box-sizing: border-box;
         }
+
         input:focus {
             border-color: #28a745;
             outline: none;
             box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
         }
+
         .error {
             color: #dc3545;
             font-size: 14px;
             margin-top: 5px;
         }
+
         .btn {
             display: inline-block;
             padding: 12px 24px;
@@ -67,24 +75,30 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         .btn-success {
             background-color: #28a745;
             color: white;
         }
+
         .btn-success:hover {
             background-color: #1e7e34;
         }
+
         .btn-secondary {
             background-color: #6c757d;
             color: white;
         }
+
         .btn-secondary:hover {
             background-color: #545b62;
         }
+
         .buttons {
             text-align: center;
             margin-top: 30px;
         }
+
         .info-box {
             background-color: #d1ecf1;
             border: 1px solid #bee5eb;
@@ -93,17 +107,21 @@
             border-radius: 5px;
             margin-bottom: 20px;
         }
+
         .back-link {
             text-align: center;
             margin-top: 20px;
         }
+
         .back-link a {
             color: #28a745;
             text-decoration: none;
         }
+
         .back-link a:hover {
             text-decoration: underline;
         }
+
         .required {
             color: #dc3545;
         }
@@ -118,7 +136,6 @@
         Вы сможете просматривать и редактировать свой профиль в личном кабинете.
     </div>
 
-    <!-- Форма регистрации -->
     <form th:action="@{/register}" th:object="${user}" method="post">
 
         <!-- Имя -->
@@ -132,7 +149,6 @@
             <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
         </div>
 
-        <!-- Возраст -->
         <div class="form-group">
             <label for="age">Возраст <span class="required">*</span>:</label>
             <input type="number"
@@ -145,7 +161,6 @@
             <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
             <label for="email">Email <span class="required">*</span>:</label>
             <input type="email"
@@ -157,7 +172,6 @@
             <div class="error" th:if="${emailError}" th:text="${emailError}"></div>
         </div>
 
-        <!-- Пароль -->
         <div class="form-group">
             <label for="password">Пароль <span class="required">*</span>:</label>
             <input type="password"
@@ -168,14 +182,12 @@
             <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
         </div>
 
-        <!-- Кнопки -->
         <div class="buttons">
             <button type="submit" class="btn btn-success">✅ Зарегистрироваться</button>
             <a th:href="@{/}" class="btn btn-secondary">❌ Отмена</a>
         </div>
     </form>
 
-    <!-- Ссылка на вход -->
     <div class="back-link">
         <p>Уже есть аккаунт? <a th:href="@{/login}">🔑 Войти в систему</a></p>
         <p><a th:href="@{/}">← Вернуться на главную</a></p>

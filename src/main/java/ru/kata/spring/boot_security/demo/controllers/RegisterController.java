@@ -15,10 +15,6 @@ import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Контроллер для регистрации новых пользователей
- * Позволяет любому человеку зарегистрироваться как обычный пользователь
- */
 @Controller
 public class RegisterController {
 
@@ -34,29 +30,21 @@ public class RegisterController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Показывает форму регистрации
-     */
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
         return "register";
     }
 
-    /**
-     * Обрабатывает отправку формы регистрации
-     */
     @PostMapping("/register")
     public String processRegistration(@ModelAttribute("user") @Valid User user,
                                       BindingResult bindingResult,
                                       Model model) {
 
-        // Проверяем ошибки валидации
         if (bindingResult.hasErrors()) {
             return "register";
         }
 
-        // ✅ ИСПРАВЛЕНО: используем getByEmail для совместимости
         try {
             User existingUser = userService.getByEmail(user.getEmail());
             if (existingUser != null) {
@@ -64,10 +52,8 @@ public class RegisterController {
                 return "register";
             }
         } catch (Exception e) {
-            // Email свободен, продолжаем
         }
 
-        // Шифруем пароль
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleService.getRoleByName("ROLE_USER");
@@ -75,7 +61,6 @@ public class RegisterController {
         roles.add(userRole);
         user.setRoles(roles);
 
-        // Сохраняем пользователя
         userService.saveUser(user);
 
         return "redirect:/login?registered";

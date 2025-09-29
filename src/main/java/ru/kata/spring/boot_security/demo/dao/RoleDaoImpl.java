@@ -9,7 +9,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class RoleDaoImpl implements RoleDao{
+public class RoleDaoImpl implements RoleDao {
 
     @PersistenceContext
     private EntityManager em;
@@ -34,9 +34,9 @@ public class RoleDaoImpl implements RoleDao{
 
     @Override
     public void save(Role role) {
-        if (role.getId()==null){
+        if (role.getId() == null) {
             em.persist(role);
-        }else{
+        } else {
             em.merge(role);
         }
     }
@@ -44,7 +44,7 @@ public class RoleDaoImpl implements RoleDao{
     @Override
     public void deleteById(Long id) {
         Role role = em.find(Role.class, id);
-        if (role!=null){
+        if (role != null) {
             em.remove(role);
         }
     }

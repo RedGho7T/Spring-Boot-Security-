@@ -11,44 +11,53 @@
             background: #f0f2f5;
             font-family: Arial, sans-serif;
         }
+
         .container {
             max-width: 600px;
             margin: 0 auto;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         header {
             background: #007bff;
             color: #fff;
             padding: 16px;
             text-align: center;
         }
+
         header h1 {
             margin: 0;
             font-size: 24px;
         }
+
         .profile {
             padding: 20px;
         }
+
         .field {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
             border-bottom: 1px solid #eee;
         }
+
         .field:last-child {
             border-bottom: none;
         }
+
         .field-label {
             font-weight: bold;
             color: #555;
         }
+
         .roles {
             margin: 16px 0;
             text-align: center;
         }
+
         .roles span {
             display: inline-block;
             padding: 6px 12px;
@@ -57,13 +66,21 @@
             color: #fff;
             font-size: 14px;
         }
-        .role-user { background: #28a745; }
-        .role-admin { background: #dc3545; }
+
+        .role-user {
+            background: #28a745;
+        }
+
+        .role-admin {
+            background: #dc3545;
+        }
+
         .actions {
             padding: 20px;
             text-align: center;
             background: #f9f9f9;
         }
+
         .actions a, .actions button {
             display: inline-block;
             margin: 0 8px;
@@ -74,16 +91,22 @@
             text-decoration: none;
             cursor: pointer;
         }
+
         .btn-logout {
             background: #6c757d;
             color: #fff;
         }
+
         .btn-home {
             background: #007bff;
             color: #fff;
         }
+
         @media (max-width: 480px) {
-            .field { flex-direction: column; align-items: flex-start; }
+            .field {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -110,7 +133,8 @@
             <div th:text="${user.id}">1</div>
         </div>
         <div class="roles">
-            <div class="field-label">Роли:</div><br/>
+            <div class="field-label">Роли:</div>
+            <br/>
             <span th:each="role: ${user.roles}"
                   th:classappend="${role.name == 'ROLE_ADMIN'} ? ' role-admin' : ' role-user'"
                   th:text="${role.name}">ROLE_USER</span>
