@@ -18,7 +18,7 @@
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
@@ -191,6 +191,7 @@
             margin-top: 10px;
             font-style: italic;
         }
+
         /* КОНЕЦ НОВЫХ СТИЛЕЙ */
 
         .checkbox-group {
@@ -268,7 +269,8 @@
     </div>
 
     <div class="warning">
-        ⚠️ <strong>Внимание!</strong> При редактировании пользователя вы можете оставить поле пароля пустым, чтобы не изменять его.
+        ⚠️ <strong>Внимание!</strong> При редактировании пользователя вы можете оставить поле пароля пустым, чтобы не
+        изменять его.
         Если вы введете новый пароль, он заменит текущий.
     </div>
 
@@ -388,7 +390,7 @@
 
 <!-- НОВЫЙ JAVASCRIPT С УМНОЙ ЛОГИКОЙ -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const passwordSection = document.getElementById('passwordSection');
         const togglePasswordBtn = document.getElementById('togglePasswordBtn');
         const passwordFields = document.getElementById('passwordFields');
@@ -412,7 +414,7 @@
         let isEditingPassword = false;
 
         // Переключение режима редактирования пароля
-        togglePasswordBtn.addEventListener('click', function() {
+        togglePasswordBtn.addEventListener('click', function () {
             isEditingPassword = !isEditingPassword;
 
             if (isEditingPassword) {
@@ -583,7 +585,7 @@
         confirmPasswordField.addEventListener('input', validateForm);
 
         // Проверка при отправке формы
-        document.getElementById('editUserForm').addEventListener('submit', function(e) {
+        document.getElementById('editUserForm').addEventListener('submit', function (e) {
             if (isEditingPassword && !validateForm()) {
                 e.preventDefault();
                 alert('Пожалуйста, исправьте ошибки в полях пароля');

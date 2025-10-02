@@ -1,16 +1,23 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.model.Role;
+
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Autowired
     public UserDetailsServiceImpl(UserService userService) {
@@ -19,30 +26,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("🔍 Попытка входа с email: " + email);
+        logger.info("Attempting to load user by email: {}", email);
 
-        try {
-            User user = userService.getByEmail(email);
-            if (user == null) {
-                System.out.println("❌ Пользователь НЕ НАЙДЕН: " + email);
-                throw new UsernameNotFoundException("Пользователь с email '" + email + "' не найден");
-            }
-
-            System.out.println("✅ Найден пользователь: " + user.getName());
-            System.out.println("✅ Роли: " + user.getRoles().size());
-
-            // Выводим роли для отладки
-            user.getRoles().forEach(role -> {
-                System.out.println("  - Роль: " + role.getName());
-            });
-
-            return user; // Возвращаем пользователя как UserDetails
-
-        } catch (Exception e) {
-            System.out.println("❌ ОШИБКА при поиске пользователя: " + e.getMessage());
-            e.printStackTrace();
-            throw new UsernameNotFoundException("Ошибка при поиске пользователя: " + email, e);
-        }
+        return userService.findByEmailWithRoles(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with email: " + email)
+                );
     }
-
 }

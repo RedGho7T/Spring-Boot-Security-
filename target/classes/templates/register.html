@@ -160,6 +160,7 @@
             border-color: #d32f2f;
             box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
         }
+
         /* КОНЕЦ НОВЫХ СТИЛЕЙ */
 
         .button-group {
@@ -237,7 +238,8 @@
 
     <div class="info-box">
         <h3>ℹ️ Информация:</h3>
-        <p>После регистрации вы получите роль обычного пользователя. Вы сможете просматривать и редактировать свой профиль в личном кабинете.</p>
+        <p>После регистрации вы получите роль обычного пользователя. Вы сможете просматривать и редактировать свой
+            профиль в личном кабинете.</p>
     </div>
 
     <div th:if="${error}" class="error-message" th:text="${error}"></div>
@@ -351,7 +353,7 @@
 
 <!-- НОВЫЙ JAVASCRIPT ДЛЯ ВАЛИДАЦИИ -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const passwordField = document.getElementById('password');
         const confirmPasswordField = document.getElementById('confirmPassword');
         const registerBtn = document.getElementById('registerBtn');
@@ -470,7 +472,7 @@
         confirmPasswordField.addEventListener('input', validateForm);
 
         // Проверка при отправке формы
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
             if (!validateForm()) {
                 e.preventDefault(); // Останавливаем отправку
                 alert('Пожалуйста, исправьте ошибки в форме');

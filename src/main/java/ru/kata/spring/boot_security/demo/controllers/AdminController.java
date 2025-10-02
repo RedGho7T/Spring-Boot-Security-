@@ -1,7 +1,8 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,80 +21,35 @@ public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
-    private final PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
-    public AdminController(UserService userService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
     public String listUsers(Model model) {
-        try {
-            List<User> users = userService.getAllUsers();
-            model.addAttribute("users", users);
-            System.out.println("✅ Загружено пользователей: " + users.size());
-            return "admin/list";
-        } catch (Exception e) {
-            System.out.println("❌ Ошибка при загрузке пользователей: " + e.getMessage());
-            model.addAttribute("error", "Ошибка при загрузке списка пользователей");
-            return "admin/list";
-        }
+        model.addAttribute("users", userService.getAllUsersWithRoles());
+        return "admin/list";
     }
 
     @GetMapping("/new")
     public String newUserForm(Model model) {
-        try {
-            model.addAttribute("user", new User());
-            model.addAttribute("allRoles", roleService.getAllRoles());
-            return "admin/new";
-        } catch (Exception e) {
-            System.out.println("❌ Ошибка при загрузке формы создания: " + e.getMessage());
-            model.addAttribute("error", "Ошибка при загрузке формы");
-            return "admin/list";
-        }
+        model.addAttribute("user", new User());
+        model.addAttribute("allRoles", roleService.getAllRoles());
+        return "admin/new";
     }
 
     @PostMapping
     public String createUser(@ModelAttribute("user") User user, Model model) {
         try {
-            System.out.println("🔄 Создаём пользователя: " + user.getEmail());
-
-            Set<Long> selectedRoleIds = user.getRoles().stream()
-                    .map(Role::getId)
-                    .collect(Collectors.toSet());
-
-            Set<Role> roles = roleService.getAllRoles().stream()
-                    .filter(r -> selectedRoleIds.contains(r.getId()))
-                    .collect(Collectors.toSet());
-
-            user.setRoles(roles);
-
-            if (user.getPassword() == null || user.getPassword().isEmpty()) {
-                String password = user.getPassword();
-                System.out.println("Шифрование пароля: "+ password.length());
-
-                String encodedPassword = passwordEncoder.encode(password);
-                user.setPassword(encodedPassword);
-
-                System.out.println("Пароль зашифрован: "+ encodedPassword.substring(0,20) +"...");
-            }else {
-                System.out.println("Пароль пустой или null");
-                model.addAttribute("eror","Пароль не может быть пустым");
-                model.addAttribute("allRoles", roleService.getAllRoles());
-                return "admin/new";
-            }
-
             userService.saveUser(user);
-
-            System.out.println("✅ Пользователь создан успешно");
             return "redirect:/admin";
-
         } catch (Exception e) {
-            System.out.println("❌ Ошибка при создании пользователя: " + e.getMessage());
-            model.addAttribute("error", "Ошибка при создании пользователя: " + e.getMessage());
+            logger.error("Error creating user", e);
+            model.addAttribute("error", e.getMessage());
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "admin/new";
         }
@@ -101,22 +57,13 @@ public class AdminController {
 
     @GetMapping("/{id}/edit")
     public String editUserForm(@PathVariable("id") Long id, Model model) {
-        try {
-            User user = userService.getUserById(id);
-            if (user == null) {
-                System.out.println("❌ Пользователь с ID " + id + " не найден");
-                return "redirect:/admin";
-            }
-
-            model.addAttribute("user", user);
-            model.addAttribute("allRoles", roleService.getAllRoles());
-            return "admin/edit";
-
-        } catch (Exception e) {
-            System.out.println("❌ Ошибка при загрузке формы редактирования: " + e.getMessage());
-            return "redirect:/admin";
-        }
+        User user = userService.getUserByIdWithRoles(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
+        model.addAttribute("user", user);
+        model.addAttribute("allRoles", roleService.getAllRoles());
+        return "admin/edit";
     }
+
 
     @PostMapping("/{id}")
     public String updateUser(@PathVariable("id") Long id,
@@ -124,45 +71,18 @@ public class AdminController {
                              @RequestParam(value = "roleIds", required = false) Set<Long> roleIds,
                              Model model) {
         try {
-            System.out.println("🔄 Обновляем пользователя с ID: " + id);
-
-            User existingUser = userService.getUserById(id);
-            if (existingUser == null) {
-                System.out.println("❌ Пользователь с ID " + id + " не найден");
-                return "redirect:/admin";
-            }
-
             user.setId(id);
-
-            if (roleIds != null && !roleIds.isEmpty()) {
+            if (roleIds != null) {
                 Set<Role> roles = roleService.getAllRoles().stream()
                         .filter(r -> roleIds.contains(r.getId()))
                         .collect(Collectors.toSet());
                 user.setRoles(roles);
-                System.out.println("✅ Установлены роли: " + roles.size());
-            } else {
-                user.setRoles(existingUser.getRoles());
-                System.out.println("⚠️ Роли не изменились");
             }
-
-            if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
-                user.setPassword(existingUser.getPassword());
-                System.out.println("⚠️ Пароль не изменился");
-            } else {
-                String encodedPassword = passwordEncoder.encode(user.getPassword());
-                user.setPassword(encodedPassword);
-                System.out.println("✅ Пароль обновлен");
-            }
-
             userService.updateUser(user);
-            System.out.println("✅ Пользователь обновлен успешно");
-
             return "redirect:/admin";
-
         } catch (Exception e) {
-            System.out.println("❌ Ошибка при обновлении пользователя: " + e.getMessage());
-            e.printStackTrace();
-            model.addAttribute("error", "Ошибка при обновлении пользователя: " + e.getMessage());
+            logger.error("Error updating user", e);
+            model.addAttribute("error", e.getMessage());
             model.addAttribute("allRoles", roleService.getAllRoles());
             return "admin/edit";
         }
@@ -171,13 +91,11 @@ public class AdminController {
     @PostMapping("/{id}/delete")
     public String deleteUser(@PathVariable("id") Long id) {
         try {
-            System.out.println("🗑️ Удаляем пользователя с ID: " + id);
             userService.deleteUser(id);
-            System.out.println("✅ Пользователь удален успешно");
             return "redirect:/admin";
         } catch (Exception e) {
-            System.out.println("❌ Ошибка при удалении пользователя: " + e.getMessage());
-            return "redirect:/admin";
+            logger.error("Error deleting user", e);
         }
+        return "redirect:/admin";
     }
 }
